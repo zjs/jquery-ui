@@ -17,7 +17,7 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
-		value: 0,
+		value: false,
 		max: 100
 	},
 
@@ -36,7 +36,12 @@ $.widget( "ui.progressbar", {
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
-		this.oldValue = this._value();
+		if ( this.options.value !== false ) {
+			this.oldValue = this._value();
+		} else {
+			this.oldValue = false;
+			this.valueDiv.addClass( "ui-progressbar-animated" );
+		}
 		this._refreshValue();
 	},
 
@@ -63,6 +68,11 @@ $.widget( "ui.progressbar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			this.options.value = value;
+			if ( value !== false ) {
+				this.valueDiv.removeClass( "ui-progressbar-animated" );
+			} else {
+				this.valueDiv.addClass( "ui-progressbar-animated" );
+			}
 			this._refreshValue();
 			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
@@ -75,8 +85,10 @@ $.widget( "ui.progressbar", {
 	_value: function() {
 		var val = this.options.value;
 		// normalize invalid value
-		if ( typeof val !== "number" ) {
+		if ( typeof val !== "number" && val !== false ) {
 			val = 0;
+		} else if( val === false ) {
+			val = 100;
 		}
 		return Math.min( this.options.max, Math.max( this.min, val ) );
 	},
