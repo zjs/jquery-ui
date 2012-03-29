@@ -17,31 +17,25 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
-		value: false,
+		value: 0,
 		max: 100
 	},
 
 	min: 0,
 
 	_create: function() {
+		var val = this._value();
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				role: "progressbar",
 				"aria-valuemin": this.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this._value()
+				"aria-valuemax": this.options.max
 			});
 
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
-		if ( this.options.value !== false ) {
-			this.oldValue = this._value();
-		} else {
-			this.oldValue = false;
-			this.valueDiv.addClass( "ui-progressbar-animated" );
-		}
 		this._refreshValue();
 	},
 
@@ -68,11 +62,7 @@ $.widget( "ui.progressbar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			this.options.value = value;
-			if ( value !== false ) {
-				this.valueDiv.removeClass( "ui-progressbar-animated" );
-			} else {
-				this.valueDiv.addClass( "ui-progressbar-animated" );
-			}
+
 			this._refreshValue();
 			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
@@ -88,18 +78,21 @@ $.widget( "ui.progressbar", {
 		if ( typeof val !== "number" && val !== false ) {
 			val = 0;
 		} else if( val === false ) {
-			val = 100;
+			val = NaN;
 		}
 		return Math.min( this.options.max, Math.max( this.min, val ) );
 	},
 
 	_percentage: function() {
-		return 100 * this._value() / this.options.max;
+		var val = this._value();
+		return isNaN( val ) ? 100 : 100 * val / this.options.max;
 	},
 
 	_refreshValue: function() {
 		var value = this.value(),
 			percentage = this._percentage();
+
+		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", isNaN( value ) );
 
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;
@@ -107,10 +100,14 @@ $.widget( "ui.progressbar", {
 		}
 
 		this.valueDiv
-			.toggle( value > this.min )
+			.toggle( isNaN( value ) || value > this.min )
 			.toggleClass( "ui-corner-right", value === this.options.max )
 			.width( percentage.toFixed(0) + "%" );
-		this.element.attr( "aria-valuenow", value );
+		if ( isNaN( value ) ) {
+			this.element.removeAttr( "aria-valuenow" );
+		} else {
+			this.element.attr( "aria-valuenow", value );
+		}
 	}
 });
 
