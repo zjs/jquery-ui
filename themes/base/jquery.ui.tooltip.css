@@ -6,16 +6,18 @@
  * http://jquery.org/license
  */
 .ui-tooltip {
-	padding:8px;
-	position:absolute;
-	z-index:9999;
+	position: absolute;
+	padding: 8px;
 	-o-box-shadow: 0 0 5px #aaa;
 	-moz-box-shadow: 0 0 5px #aaa;
 	-webkit-box-shadow: 0 0 5px #aaa;
 	box-shadow: 0 0 5px #aaa;
+	z-index: 9999;
 }
 /* Fades and background-images don't work well together in IE6, drop the image */
 * html .ui-tooltip {
 	background-image: none;
 }
-body .ui-tooltip { border-width:2px; }
+body .ui-tooltip {
+	border-width: 2px;
+}
