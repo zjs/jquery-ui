@@ -33,7 +33,7 @@ $.widget( "ui.progressbar", {
 				"aria-valuemax": this.options.max
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div class='ui-progressbar-overlay'></div></div>" )
 			.appendTo( this.element );
 
 		this.oldValue = this._value();
@@ -61,8 +61,8 @@ $.widget( "ui.progressbar", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key === "value" ) {
-			this.options.value = value;
+		if ( key === "value" || key === "animation" ) {
+			this.options[ key ] = value;
 			this._refreshValue();
 			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
@@ -90,9 +90,22 @@ $.widget( "ui.progressbar", {
 
 	_refreshValue: function() {
 		var value = this.value(),
-			percentage = this._percentage();
+			percentage = this._percentage(),
+			overlay = this.valueDiv.children().eq( 0 );
 
-		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", isNaN( value ) );
+		if ( isNaN( value ) || this.options.animation ) {
+			if ( this.options.animation === "dark" ) {
+				overlay
+					.addClass( "ui-progressbar-animated-dark" )
+					.removeClass( "ui-progressbar-animated" );
+			} else {
+				overlay
+					.addClass( "ui-progressbar-animated" )
+					.removeClass( "ui-progressbar-animated-dark" );
+			}
+		} else {
+			overlay.removeClass( "ui-progressbar-animated ui-progressbar-animated-dark" );
+		}
 
 		if ( this.oldValue !== value && ( !isNaN( this.oldValue ) || !isNaN( value ) ) ) {
 			this.oldValue = value;
