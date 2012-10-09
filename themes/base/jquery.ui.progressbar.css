@@ -11,11 +11,36 @@
 .ui-progressbar { height:2em; text-align: left; overflow: hidden; }
 .ui-progressbar .ui-progressbar-value { margin: -1px; height:100%; }
 
+@-webkit-keyframes bg-anim {
+    from { background-position: 40px 0 }
+    to { background-position: 0 0 }
+}
+@-moz-keyframes bg-anim {
+    from { background-position: 40px 0 }
+    to { background-position: 0 0 }
+}
+@-ms-keyframes bg-anim {
+    from { background-position: 40px 0 }
+    to { background-position: 0 0 }
+}
+@keyframes bg-anim {
+    from { background-position: 40px 0 }
+    to { background-position: 0 0 }
+}
+
+.ui-progressbar .ui-progressbar-animated-light { background: url("images/pb-animated-light.png"); }
+.ui-progressbar .ui-progressbar-animated-dark { background: url("images/pb-animated-dark.png"); }
+.ui-progressbar .ui-progressbar-animated-light, .ui-progressbar .ui-progressbar-animated-dark {
+    -webkit-animation: bg-anim 1.5s linear infinite;
+    -moz-animation: bg-anim 1.5s linear infinite;
+    -ms-animation: bg-anim 1.5s linear infinite;
+    animation: bg-anim 1.5s linear infinite;
+}
+
 .ui-progressbar-overlay {
 	height: 100%;
 	filter: alpha(opacity=40);
 	opacity: 0.4;
 }
-
-.ui-progressbar .ui-progressbar-animated { background: url("images/pb-overlay.gif"); }
-.ui-progressbar .ui-progressbar-animated-dark { background: url("images/pb-overlay-dark.gif"); }
+.ui-progressbar .ui-progressbar-value .ui-progressbar-animated-light { background: url("images/pb-overlay-animated-light.gif"); }
+.ui-progressbar .ui-progressbar-value .ui-progressbar-animated-dark { background: url("images/pb-overlay-animated-dark.gif"); }

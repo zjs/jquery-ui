@@ -33,7 +33,7 @@ $.widget( "ui.progressbar", {
 				"aria-valuemax": this.options.max
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div class='ui-progressbar-overlay'></div></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div></div></div>" )
 			.appendTo( this.element );
 
 		this.oldValue = this._value();
@@ -93,18 +93,13 @@ $.widget( "ui.progressbar", {
 			percentage = this._percentage(),
 			overlay = this.valueDiv.children().eq( 0 );
 
-		if ( isNaN( value ) || this.options.animation ) {
-			if ( this.options.animation === "dark" ) {
-				overlay
-					.addClass( "ui-progressbar-animated-dark" )
-					.removeClass( "ui-progressbar-animated" );
-			} else {
-				overlay
-					.addClass( "ui-progressbar-animated" )
-					.removeClass( "ui-progressbar-animated-dark" );
-			}
+		if ( this._hasAnimationSupport() ) {
+			this.valueDiv.toggleClass( "ui-progressbar-animated-light", this.element.is( ".ui-progressbar-animated-light" ) );
+			this.valueDiv.toggleClass( "ui-progressbar-animated-dark", this.element.is( ".ui-progressbar-animated-dark" ) );
 		} else {
-			overlay.removeClass( "ui-progressbar-animated ui-progressbar-animated-dark" );
+			overlay.toggleClass( "ui-progressbar-overlay", this.element.is( "[class*='ui-progressbar-animated-']" ) );
+			overlay.toggleClass( "ui-progressbar-animated-light", this.element.is( ".ui-progressbar-animated-light" ) );
+			overlay.toggleClass( "ui-progressbar-animated-dark", this.element.is( ".ui-progressbar-animated-dark" ) );
 		}
 
 		if ( this.oldValue !== value && ( !isNaN( this.oldValue ) || !isNaN( value ) ) ) {
@@ -121,6 +116,23 @@ $.widget( "ui.progressbar", {
 		} else {
 			this.element.attr( "aria-valuenow", value );
 		}
+	},
+
+	_hasAnimationSupport: function() {
+		// Adapted from MDN test https://developer.mozilla.org/en-US/docs/CSS/CSS_animations/Detecting_CSS_animation_support
+		if ( this.element[ 0 ].style.animationName ) {
+			return true;
+		}
+
+		var domPrefixes = "Webkit Moz O ms Khtml".split( " " ),
+			i;
+		for( i = 0; i < domPrefixes.length; i++ ) {
+			if( this.element[ 0 ].style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 });
 

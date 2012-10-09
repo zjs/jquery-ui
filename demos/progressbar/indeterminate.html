@@ -18,33 +18,44 @@
 			var target = $( event.target ),
 				pbar = $( "#progressbar" ),
 				pbarValue = pbar.find( ".ui-progressbar-value" );
+
 			if ( target.is( "#numButton" ) ) {
-				pbar.progressbar( "option", {
-					value: Math.floor( Math.random() * 100 ),
-					animation: false
-				});
+				pbarValue.css( "background-color", "inherit" );
+				pbar
+					.removeClass( "ui-progressbar-animated-light ui-progressbar-animated-dark" )
+					.progressbar( "option", {
+						value: Math.floor( Math.random() * 100 )
+					});
 			} else if ( target.is( "#colorButton" ) ) {
 				pbarValue.css({
-					background: "none",
 					"background-color": '#' + Math.floor( Math.random() * 16777215 ).toString( 16 )
 				});
 			} else {
-				if ( target.is( "#falseButton" ) ) {
-					pbar.progressbar( "option", "animation", "light" );
+				if ( target.is( "#falseButtonLight" ) ) {
+					pbar
+						.addClass( "ui-progressbar-animated-light" )
+						.removeClass( "ui-progressbar-animated-dark" );
 				} else {
-					pbar.progressbar( "option", "animation", "dark" );
+					pbar
+						.addClass( "ui-progressbar-animated-dark" )
+						.removeClass( "ui-progressbar-animated-light" );
 				}
 				pbar.progressbar( "option", "value", false );
 			}
 		});
 	});
 	</script>
+	<style>
+		#progressbar .ui-progressbar-value {
+			background-color: #CCCCCC;
+		}
+	</style>
 </head>
 <body>
 
-<div id="progressbar"></div>
+<div id="progressbar" class="ui-progressbar-animated-light"></div>
 <button id="numButton">Random Value - Determinate</button>
-<button id="falseButton">Indeterminate - Light</button>
+<button id="falseButtonLight">Indeterminate - Light</button>
 <button id="falseButtonDark">Indeterminate - Dark</button>
 <button id="colorButton">Random Color</button>
 
