@@ -54,6 +54,33 @@ test( "mask with optional input", function() {
 	equal( input.val(), "(123) 4__-____", "Initial value" );
 });
 
+test( "mask with multiple optional inputs", function() {
+	expect( 1 );
+	var input = $( "#mask1" ).val("1234").mask({
+		mask: "(999) 999-9999?x9?9?9?9",
+	});
+
+	equal( input.val(), "(123) 4__-____", "Initial value" );
+});
+
+test( "mask with escaped characters", function() {
+	expect( 1 );
+	var input = $( "#mask1" ).val("1234").mask({
+		mask: "(\\9\\9\\9)\\\\ 999-99\\a\\*\\?x9999",
+	});
+
+	equal( input.val(), "(999)\\ 123-4_a*?x____", "Initial value" );
+});
+
+test( "escaped use of custom mask with wrapper ", function() {
+	expect( 1 );
+	var input = $( "#mask1" ).val("1").mask({
+		mask: "9\\<xyz\\>",
+	});
+
+	equal( input.val(), "1<xyz>", "Initial value" );
+});
+
 test( "custom mask with wrapper", function() {
 	expect( 1 );
 	var input = $( "#mask1" ).val("monA0").mask({
