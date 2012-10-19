@@ -20,9 +20,9 @@ $.widget( "ui.mask", {
 	options: {
 		clearEmpty: true,
 		definitions: {
-			'9': /[0-9]/,
-			'a': /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
-			'*': /[A-Za-z0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/
+			"9": /[0-9]/,
+			"a": /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
+			"*": /[A-Za-z0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/
 		},
 		mask: null,
 		placeholder: "_"
@@ -346,7 +346,7 @@ $.widget( "ui.mask", {
 			index = -1,
 			options = this.options,
 			mask = options.mask,
-			reservedChars = ["a", "9", "*", "?", "<", ">", "\\"];
+			reservedChars = [ "a", "9", "*", "?", "<", ">", "\\" ];
 
 		this.buffer = [];
 		if ( !mask ) {
@@ -355,7 +355,8 @@ $.widget( "ui.mask", {
 
 		// search for escaped reserved characters
 		for ( index = 0 ; index < mask.length - 1 ; index++ ) {
-			if ( mask.charAt(index) === "\\" && $.inArray( mask.charAt(index + 1), reservedChars ) !== -1 ) {
+			if ( mask.charAt( index ) === "\\" &&
+				 $.inArray( mask.charAt( index + 1 ), reservedChars ) !== -1 ) {
 				// remove escape character
 				mask = mask.substring( 0, index ) + mask.substring( index + 1 );
 
